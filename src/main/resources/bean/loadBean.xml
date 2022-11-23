@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd
+                           http://www.springframework.org/schema/context  https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="cabinet" class="mvc.bean.Cabinet">
+        <property name="medicineBoxNum" value="9"></property>
+        <property name="the_number_of_drugs_taken_for_each_class_of_drugs" value="50"></property>
+        <property name="typeOfMedication" value="香槟"></property>
+        <property name="dispensing" value="1"></property>
+    </bean>
+
+    <bean id="cabinet1" class="mvc.bean.Cabinet">
+        <property name="medicineBoxNum" value="11"></property>
+        <property name="the_number_of_drugs_taken_for_each_class_of_drugs" value="50"></property>
+        <property name="typeOfMedication" value="伏特加"></property>
+        <property name="dispensing" value="1"></property>
+    </bean>
+
+    <bean id="cabinet2" class="mvc.bean.Cabinet">
+    <property name="medicineBoxNum" value="8"></property>
+    <property name="the_number_of_drugs_taken_for_each_class_of_drugs" value="50"></property>
+    <property name="typeOfMedication" value="芬达"></property>
+    <property name="dispensing" value="1"></property>
+</bean>
+
+    <bean id="medicine" class="mvc.bean.Medicine">
+        <property name="userId" value="3"/>
+        <property name="id" value="2"/>
+        <property name="medicineName" value="百事可乐"/>
+        <property name="medicineNum" value="5"/>
+        <property name="time" value="18:00"/>
+    </bean>
+
+    <bean id="medicine1" class="mvc.bean.Medicine">
+        <property name="userId" value="4"/>
+        <property name="id" value="3"/>
+        <property name="medicineName" value="可口可乐"/>
+        <property name="medicineNum" value="985"/>
+        <property name="time" value="15:00"/>
+    </bean>
+
+    <bean id="manager" class="mvc.bean.Manager">
+        <property name="userId" value="1"></property>
+        <property name="username" value="义乌"></property>
+        <property name="age" value="91"></property>
+        <property name="account" value="123456"></property>
+        <property name="password" value="asdqwe"></property>
+    </bean>
+
+    <bean id="manager2" class="mvc.bean.Manager">
+        <property name="userId" value="2"></property>
+        <property name="username" value="李四"></property>
+        <property name="age" value="85"></property>
+        <property name="account" value="123456"></property>
+        <property name="password" value="zxcasd"></property>
+    </bean>
+
+    <bean id="manager3" class="mvc.bean.Manager">
+        <property name="userId" value="3"></property>
+        <property name="username" value="王五"></property>
+        <property name="age" value="95"></property>
+        <property name="account" value="123456"></property>
+        <property name="password" value="asdyui"></property>
+    </bean>
+
+    <bean id="medicineBox" class="mvc.bean.MedicineBox">
+        <property name="medicineBoxNum" value="1"/>
+        <property name="deliver" value="0"/>
+        <property name="userId" value="1"/>
+        <property name="user" ref="user1"/>
+        <property name="medicineList" ref="medicine"/>
+        <property name="timeList" ref="time"/>
+    </bean>
+
+    <bean id="medicineBox1" class="mvc.bean.MedicineBox">
+        <property name="medicineBoxNum" value="50"/>
+        <property name="deliver" value="0"/>
+        <property name="userId" value="6"/>
+        <property name="user" ref="user2"/>
+        <property name="medicineList" ref="medicine"/>
+        <property name="timeList" ref="time"/>
+    </bean>
+
+    <bean id="medicineBox2" class="mvc.bean.MedicineBox">
+        <property name="medicineBoxNum" value="3"/>
+        <property name="deliver" value="1"/>
+        <property name="userId" value="3"/>
+    </bean>
+
+    <bean id="time" class="mvc.bean.Time">
+        <property name="id" value="7"/>
+        <property name="time" value="8:00"/>
+        <property name="userId" value="3"/>
+        <property name="onTime" value="1"/>
+    </bean>
+
+    <bean id="time1" class="mvc.bean.Time">
+        <property name="id" value="8"/>
+        <property name="time" value="222:00"/>
+        <property name="userId" value="3"/>
+        <property name="onTime" value="1"/>
+    </bean>
+
+    <bean id="time2" class="mvc.bean.Time">
+        <property name="id" value="9"/>
+        <property name="time" value="188:00"/>
+        <property name="userId" value="3"/>
+        <property name="onTime" value="0"/>
+    </bean>
+
+    <bean id="user1" class="mvc.bean.User">
+        <property name="userId" value="1"></property>
+        <property name="username" value="张三"></property>
+        <property name="gender" value="男"></property>
+        <property name="age" value="84"></property>
+        <property name="telephoneNumber" value="1802553316"></property>
+        <property name="emergencyContacts" value="李四"></property>
+        <property name="emergency_contacts_telephoneNumber" value="120"></property>
+        <property name="medicineBox" ref="medicineBox"/>
+        <property name="medicineList" ref="medicine"/>
+        <property name="timeList" ref="time"/>
+    </bean>
+
+    <bean id="user2" class="mvc.bean.User">
+        <property name="userId" value="1"></property>
+        <property name="username" value="胖大海"></property>
+        <property name="gender" value="男"></property>
+        <property name="age" value="98"></property>
+        <property name="telephoneNumber" value="1599874562"></property>
+        <property name="emergencyContacts" value="陈二"></property>
+        <property name="emergency_contacts_telephoneNumber" value="120"></property>
+        <property name="medicineBox" ref="medicineBox"/>
+        <property name="medicineList" ref="medicine"/>
+        <property name="timeList" ref="time"/>
+    </bean>
+
+    <bean id="user3" class="mvc.bean.User">
+        <property name="userId" value="5"></property>
+        <property name="username" value="陈二"></property>
+        <property name="gender" value="男"></property>
+        <property name="age" value="99"></property>
+        <property name="telephoneNumber" value="1785874562"></property>
+        <property name="emergencyContacts" value="张三"></property>
+        <property name="emergency_contacts_telephoneNumber" value="120"></property>
+        <property name="medicineBox" ref="medicineBox"/>
+        <property name="medicineList" ref="medicine"/>
+        <property name="timeList" ref="time"/>
+    </bean>
+
+    <bean id="user4" class="mvc.bean.User">
+        <property name="userId" value="6"></property>
+        <property name="username" value="孙七"></property>
+        <property name="gender" value="男"></property>
+        <property name="age" value="89"></property>
+        <property name="telephoneNumber" value="1599874562"></property>
+        <property name="emergencyContacts" value="陈二"></property>
+        <property name="emergency_contacts_telephoneNumber" value="120"></property>
+        <property name="medicineBox" ref="medicineBox"/>
+        <property name="medicineList" ref="medicine"/>
+        <property name="timeList" ref="time"/>
+    </bean>
+
+
+<!--    <bean id="medicineBox" class="mvc.bean.MedicineBox">-->
+<!--        <property name="medicineBoxNum" value="1"></property>-->
+<!--        <property name="The_number_of_drugs_taken_for_each_class_of_drugs">-->
+<!--            <array>-->
+<!--                <value>2</value>-->
+<!--                <value>4</value>-->
+<!--            </array>-->
+<!--        </property>-->
+<!--        <property name="typeOfMedication">-->
+<!--            <array>-->
+<!--                <value>阿司匹林</value>-->
+<!--                <value>利血平</value>-->
+<!--            </array>-->
+<!--        </property>-->
+<!--        <property name="takeMedicationTime">-->
+<!--            <array>-->
+<!--                <value>12:00</value>-->
+<!--                <value>18:00</value>-->
+<!--            </array>-->
+<!--        </property>-->
+<!--        <property name="user" ref="user"></property>-->
+<!--        <property name="medicineBoxNumber" value="4"></property>-->
+<!--        <property name="deliver" value="true"></property>-->
+<!--    </bean>-->
+
+</beans>

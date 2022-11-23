@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mvc.dao.MedicineMapper">
+
+<!--    增加药-->
+    <insert id="insertMedicine">
+        insert into medicine values
+            (#{id},#{userId},#{medicineName},#{medicineNum},#{time})
+    </insert>
+
+<!--    批量添加药-->
+    <insert id="bathInsertMedicine">
+        insert into medicine values
+                                    <foreach collection="list" separator="," item="item">
+                                    (#{item.id},#{item.userId},#{item.medicineName},#{item.medicineNum},#{item.time})
+                                    </foreach>
+    </insert>
+    
+<!--    删除药-->
+    <delete id="deleteMedicine">
+        delete from medicine
+            where UserId=#{userId} and medicine_name=#{medicineName}
+    </delete>
+    
+<!--    更新药信息-->
+    <update id="updateMedicine">
+        update medicine set UserId=#{userId},medicine_name=#{medicineName},medicine_num=#{medicineNum},medicine_time=#{time}
+                            where id=#{id}
+    </update>
+
+<!--    批量更新药物信息-->
+    <update id="bathUpdateMedicine" parameterType="java.util.List">
+                            <foreach collection="list" separator=";" item="item" index="index" open="" close="">
+                                UPDATE
+                                    medicine
+                                    <set>
+                                        UserId=#{item.userId},medicine_name=#{item.medicineName},medicine_num=#{item.medicineNum},medicine_time=#{item.time}
+                                    </set>
+                                WHERE
+                                id=#{item.id}
+                            </foreach>
+    </update>
+
+<!--    <update id="bathUpdateMedicine" parameterType="map">-->
+<!--        update-->
+<!--            medicine-->
+<!--        <trim prefix="set" suffixOverrides=",">-->
+<!--            <trim prefix="name = case" suffix="end,">-->
+<!--                <foreach collection="list" item="item" index="index">-->
+<!--                    when-->
+<!--                        id=#{item.id}-->
+<!--                    then-->
+<!--                        -->
+<!--                </foreach>-->
+<!--            </trim>-->
+<!--        </trim>-->
+<!--    </update>-->
+
+<!--    查询药物信息-->
+    <select id="selectMedicine" resultMap="MedicineMap">
+        select medicine.UserId,medicine.medicine_name,medicine.medicine_num,medicine.medicine_time,time.onTime from medicine,time
+            where medicine.UserId=#{userId}
+    </select>
+
+<!--    查询所有药物信息-->
+    <select id="selectAllMedicine" resultMap="MedicineMap">
+        select * from medicine
+    </select>
+
+    
+    <resultMap id="MedicineMap" type="mvc.bean.Medicine">
+        <id column="id" property="id"/>
+        <result column="UserId" property="userId"/>
+        <result column="medicine_name" property="medicineName"/>
+        <result column="medicine_num" property="medicineNum"/>
+        <result column="medicine_time" property="time"/>
+    </resultMap>
+
+</mapper>

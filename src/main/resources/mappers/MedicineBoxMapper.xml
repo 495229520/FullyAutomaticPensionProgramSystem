@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mvc.dao.MedicineBoxMapper">
+
+<!--    添加老人药盒信息-->
+    <insert id="insertMedicineBox" useGeneratedKeys="true">
+        insert into pension_medicinebox values
+                                                (#{medicineBoxNum},#{user.username},#{deliver},#{userId})
+    </insert>
+
+    <insert id="insertBathMedicineBox">
+        insert into pension_medicinebox values
+                                               <foreach collection="list" separator="," item="item">
+                                                   (#{item.medicineBoxNum},#{item.user.username},#{item.deliver},#{item.userId})
+                                               </foreach>
+    </insert>
+
+<!--    删除老人药盒信息-->
+    <delete id="deleteMedicineBox">
+        delete from pension_medicinebox where medicineBox_num=#{medicineBoxNum}
+    </delete>
+
+<!--    修改老人药盒信息-->
+    <update id="updateMedicineBox">
+        update pension_medicinebox
+        set
+            userId=#{userId},dispensing=#{deliver},username=#{user.username}
+        where  medicineBox_num=#{medicineBoxNum}
+    </update>
+
+<!--    批量修改老人药盒的信息-->
+    <update id="updateBathMedicineBox" parameterType="java.util.List">
+        <foreach collection="list" separator=";" item="item" index="index" open="" close="">
+            UPDATE
+                pension_medicinebox
+            <set>
+                userId=#{item.userId},username=#{item.user.username},dispensing=#{item.deliver}
+            </set>
+            WHERE
+            medicineBox_num=#{item.medicineBoxNum}
+        </foreach>
+    </update>
+
+<!--    根据userId和medicineNum查找一个药盒的所有信息-->
+    <select id="selectMedicineBox" resultMap="medicineBoxMap">
+        select pm.medicineBox_num,pm.userId,pm.dispensing,
+               pu.UserId,pu.Username,pu.Gender,pu.Age,pu.TelephoneNumber,pu.EmergencyContacts,pu.EmergencyPhone,
+               me.id,me.UserId,me.medicine_name,me.medicine_num,me.medicine_time,
+               ti.userId,ti.time,ti.onTime
+        from pension_medicinebox as pm,pension_user as pu,medicine as me,time as ti
+        where pm.medicineBox_num=#{medicineBoxNum} and pu.UserId=#{userId} and me.UserId=#{userId} and ti.userId=#{userId}
+    </select>
+
+<!--    根据username查找userId-->
+    <select id="selectMedicineBoxByUsername" resultMap="medicineBoxMap">
+        select *
+            from pension_medicinebox
+            where username=#{user.username}
+    </select>
+
+<!--    查询所有的药盒编号-->
+    <select id="selectAllMedicineBoxNum" resultMap="medicineBoxMap">
+        select *
+            from pension_medicinebox
+    </select>
+
+<!--    单纯查询药盒的归宿-->
+    <select id="simpleSelectMedicineBox" resultMap="medicineBoxMap">
+        select medicineBox_num
+            from pension_medicinebox
+            where userId=#{userId}
+    </select>
+
+    <resultMap id="medicineBoxMap" type="mvc.bean.MedicineBox">
+        <id column="medicineBox_num" property="medicineBoxNum"/>
+        <result column="userId" property="userId"/>
+        <result column="dispensing" property="deliver"/>
+        <result column="username" property="user.username"/>
+
+        <association property="user" javaType="mvc.bean.User">
+            <id column="UserId" property="userId"/>
+            <result column="Username" property="username"/>
+            <result column="Gender" property="gender"/>
+            <result column="Age" property="age"/>
+            <result column="TelephoneNumber" property="telephoneNumber"/>
+            <result column="EmergencyPhone" property="emergency_contacts_telephoneNumber"/>
+            <result column="EmergencyContacts" property="emergencyContacts"/>
+
+            <collection property="timeList" ofType="mvc.bean.Time">
+                <result column="userId" property="userId"/>
+                <result column="onTime" property="onTime"/>
+                <result column="time" property="time"/>
+            </collection>
+
+        </association>
+
+        <collection property="medicineList" ofType="mvc.bean.Medicine">
+            <id column="id" property="id"/>
+            <result column="UserId" property="userId"/>
+            <result column="medicine_name" property="medicineName"/>
+            <result column="medicine_num" property="medicineNum"/>
+            <result column="medicine_time" property="time"/>
+        </collection>
+
+        <collection property="timeList" ofType="mvc.bean.Time">
+            <result column="userId" property="userId"/>
+            <result column="onTime" property="onTime"/>
+            <result column="time" property="time"/>
+        </collection>
+
+    </resultMap>
+
+
+
+
+
+</mapper>

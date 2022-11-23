@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mvc.dao.CabinetMapper">
+
+    <insert id="insertBathCabinetBox">
+        insert into pension_cabinet values
+            <foreach collection="list" item="item" separator=",">
+                (#{item.medicineBoxNum},
+                #{item.typeOfMedication},#{item.The_number_of_drugs_taken_for_each_class_of_drugs},
+                #{item.dispensing})
+            </foreach>
+    </insert>
+
+    <insert id="insertCabinetBox">
+        insert into pension_cabinet values
+            (#{medicineBoxNum},
+             #{typeOfMedication},#{The_number_of_drugs_taken_for_each_class_of_drugs},
+             #{dispensing})
+    </insert>
+
+    <delete id="deleteCabinetBox">
+        delete from pension_cabinet
+            where medicine_name=#{typeOfMedication}
+    </delete>
+
+    <update id="updateCabinetBox">
+        update pension_cabinet set
+            medicine_name=#{typeOfMedication},
+            medicine_num=#{The_number_of_drugs_taken_for_each_class_of_drugs},Dispensing=#{dispensing}
+            where medicinebox_num=#{medicineBoxNum}
+    </update>
+
+<!--        批量更新药物信息-->
+    <update id="updateBathCabinetBox" parameterType="java.util.List">
+        <foreach collection="list" separator=";" item="item" index="index" open="" close="">
+            UPDATE
+            pension_cabinet
+            <set>
+                medicine_name=#{item.typeOfMedication},
+                medicine_num=#{item.The_number_of_drugs_taken_for_each_class_of_drugs},Dispensing=#{item.dispensing}
+            </set>
+            WHERE
+            medicinebox_num=#{item.medicineBoxNum}
+        </foreach>
+    </update>
+
+    <select id="selectCabinetBox" resultMap="cabinetBoxMap">
+        select *
+        from pension_cabinet
+        where medicine_name=#{typeOfMedication}
+    </select>
+
+    <select id="selectAllCabinetBox" resultMap="cabinetBoxMap">
+        select *
+        from pension_cabinet
+    </select>
+
+<!--    配置映射关系-->
+    <resultMap id="cabinetBoxMap" type="mvc.bean.Cabinet">
+        <id column="medicinebox_num" property="medicineBoxNum"/>
+        <result column="medicine_name" property="typeOfMedication"/>
+        <result column="medicine_num" property="The_number_of_drugs_taken_for_each_class_of_drugs"/>
+        <result column="dispensing" property="dispensing"/>
+    </resultMap>
+
+</mapper>

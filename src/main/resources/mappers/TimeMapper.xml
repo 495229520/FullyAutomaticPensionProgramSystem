@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 在java程序中，必须找到当前的Mapper配置文件，才能进一步找到这里配置的SQL语句 -->
+<!-- java程序就是通过mapper标签的namespace属性找到当前Mapper配置文件 -->
+<!-- 将来为了让一个Java接口，直接对应这个Mapper配置文件，通常使用Java接口的全类名作为这个namespace属性的值 -->
+<!--以前我们叫dao，现在叫mapper本质上都是持久化层的类型，只是命名习惯的区别-->
+<mapper namespace="mvc.dao.TimeMapper">
+
+    <insert id="insertTime">
+        insert into time values
+            (#{userId},#{time},#{onTime},#{id})
+    </insert>
+
+    <insert id="insertBathTime">
+        insert into time values
+            <foreach collection="list" separator="," item="item">
+                (#{item.userId},#{item.time},#{item.onTime},#{item.id})
+            </foreach>
+    </insert>
+
+    <delete id="deleteTime">
+        delete from time
+            where userId=#{userId} and time=#{time}
+    </delete>
+
+    <update id="updateTime">
+        update time
+            set
+                onTime=#{onTime},time=#{time},userId=#{userId}
+            where id=#{id}
+    </update>
+
+    <update id="updateBathTime">
+        <foreach collection="list" separator=";" item="item" index="index" open="" close="">
+            update
+                time
+                <set>
+                    onTime=#{item.onTime},time=#{item.time},userId=#{item.userId}
+                </set>
+            where
+            id=#{item.id}
+        </foreach>
+    </update>
+
+    <select id="selectTime" resultMap="timeMap">
+        select *
+            from time
+            where userId=#{userId}
+    </select>
+
+    <select id="selectId" resultType="Integer">
+        select id
+            from time
+            where userId=#{userId} and time=#{time}
+    </select>
+
+    <select id="selectBathTime" resultMap="timeMap">
+        select * from time
+    </select>
+
+    <resultMap id="timeMap" type="mvc.bean.Time">
+        <result column="userId" property="userId"/>
+        <result column="time" property="time"/>
+        <result column="onTime" property="onTime"/>
+    </resultMap>
+
+</mapper>

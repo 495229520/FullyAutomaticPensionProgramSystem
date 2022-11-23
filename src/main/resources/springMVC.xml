@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--    扫描组件-->
+    <context:component-scan base-package="mvc.test">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--    配置Thymeleaf视图解析器-->
+    <!--    配置视图解析器org.thymeleaf.spring5.view.ThymeleafViewResolver-->
+    <bean id="viewResolver" class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+        <!-- 配置优先级 -->
+        <property name="order" value="1"/>
+        <!-- 配置编码 -->
+        <property name="characterEncoding" value="UTF-8"/>
+        <!-- 配置模板 -->
+        <property name="templateEngine">
+            <bean class="org.thymeleaf.spring5.SpringTemplateEngine">
+                <property name="templateResolver">
+                    <bean class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+
+                        <!-- 视图前缀 -->
+                        <property name="prefix" value="/WEB-INF/templates/"/>
+                        <!-- 视图后缀 -->
+                        <property name="suffix" value=".html"/>
+                        <!-- 视图前缀 + 名称 + 视图后缀 浏览器可以根据此定位到界面 -->
+                        <!-- 模板的模型使用HTML5 -->
+                        <property name="templateMode" value="HTML5"/>
+                        <!-- 页面的编码UTF-8-->
+                        <property name="characterEncoding" value="UTF-8" />
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!--    开放对静态资源的访问,静态资源在被访问的时候先被SpringMVC处理(前端控制器)，若找不到请求映射就找默认的servlet处理
+        如果能找到就访问资源，如果找不到就报404，这个错误就不是SpringMVC报了而是servlet报了-->
+    <mvc:default-servlet-handler/>
+    <!--    配置文件上传解析器，将上传的文件封装为MultipartFile-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+    <!--    开启mvc注解驱动-->
+    <mvc:annotation-driven/>
+
+</beans>

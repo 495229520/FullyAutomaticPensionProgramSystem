@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mvc.dao.ManagerMapper">
+<!--
+Id
+Username
+-->
+    <insert id="insertManager" useGeneratedKeys="true">
+        insert into pension_manager (Id,Username,Age,Account,Password) values
+            (#{userId},#{username},#{age},#{account},#{password})
+    </insert>
+
+    <insert id="insertBathManager" useGeneratedKeys="true">
+        insert into pension_manager values
+            <foreach collection="list" separator="," item="item">
+                (#{item.userId},#{item.username},#{item.age},#{item.account},#{item.password})
+            </foreach>
+    </insert>
+
+    <select id="selectManager" resultMap="managerMap">
+        select * from pension_manager
+        where Id=#{userId}
+    </select>
+
+    <select id="selectAllManager" resultMap="managerMap">
+        select * from pension_manager
+    </select>
+
+<!--    根据用户id修改管理员信息-->
+    <update id="updateManager">
+        update pension_manager set
+            Username=#{username},Age=#{age},Account=#{account},Password=#{password}
+            where Id=#{userId}
+    </update>
+
+    <delete id="deleteManager">
+        delete from pension_manager
+            where Username=#{username}
+    </delete>
+
+    <resultMap id="managerMap" type="mvc.bean.Manager">
+        <id column="Id" property="userId"/>
+        <result column="Username" property="username"/>
+        <result column="Age" property="age"/>
+        <result column="Account" property="account"/>
+        <result column="Password" property="password"/>
+    </resultMap>
+    
+
+</mapper>

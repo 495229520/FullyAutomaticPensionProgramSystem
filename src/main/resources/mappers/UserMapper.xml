@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 在java程序中，必须找到当前的Mapper配置文件，才能进一步找到这里配置的SQL语句 -->
+<!-- java程序就是通过mapper标签的namespace属性找到当前Mapper配置文件 -->
+<!-- 将来为了让一个Java接口，直接对应这个Mapper配置文件，通常使用Java接口的全类名作为这个namespace属性的值 -->
+<!--以前我们叫dao，现在叫mapper本质上都是持久化层的类型，只是命名习惯的区别-->
+<mapper namespace="mvc.dao.UserMapper">
+
+     <!--    添加用户信息-->
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="empId">
+        insert into pension_user values
+                                        (#{userId},#{username},#{gender},#{age},#{telephoneNumber},#{emergencyContacts},#{emergency_contacts_telephoneNumber})
+    </insert>
+
+<!--        批量增加-->
+    <insert id="insertBathUser" useGeneratedKeys="true" keyProperty="empId">
+        insert into pension_user values
+                                        <foreach collection="list" separator="," item="item">
+                                            (#{item.userId},#{item.username},#{item.gender},#{item.age},
+                                             #{item.telephoneNumber},#{item.emergencyContacts},
+                                             #{item.emergency_contacts_telephoneNumber})
+                                        </foreach>
+    </insert>
+
+    <!--    更新用户信息-->
+    <update id="updateUser">
+        update pension_user
+        set Username=#{username},Gender=#{gender},Age=#{age},
+            TelephoneNumber=#{telephoneNumber},EmergencyContacts=#{emergencyContacts},
+            EmergencyPhone=#{emergency_contacts_telephoneNumber}
+        where UserId=#{userId}
+    </update>
+
+    <!--    删除用户信息-->
+    <delete id="deleteUser">
+        delete from pension_user where UserId=#{userId} and Username=#{username}
+    </delete>
+
+<!--    查询用户信息-->
+    <select id="selectUser" resultMap="userMap">
+        select pu.UserId,pu.Username,pu.Gender,pu.Age,pu.TelephoneNumber,pu.EmergencyContacts,pu.EmergencyPhone,
+               pm.medicineBox_num,pm.username,pm.userId,pm.dispensing,
+               me.id,me.UserId,me.medicine_name,me.medicine_num,me.medicine_time,
+               ti.userId,ti.time,ti.onTime
+        from pension_medicinebox as pm,pension_user as pu,medicine as me,time as ti
+        where pm.userId=#{userId} and pu.UserId=#{userId} and me.UserId=#{userId} and ti.userId=#{userId}
+    </select>
+
+<!--    查看所有的注册用户-->
+    <select id="selectSimpleUser" resultMap="userMap">
+        select *
+            from pension_user
+    </select>
+
+    <!--    查找用户数量-->
+    <select id="selectCount" resultType="integer">
+        select count(*) from pension_user
+    </select>
+
+    <select id="selectUserByUsername" resultMap="userMap">
+        select *
+            from pension_user
+            where Username=#{username}
+    </select>
+
+    <resultMap id="userMap" type="mvc.bean.User">
+        <id column="UserId" property="userId"/>
+        <result column="Username" property="username"/>
+        <result column="Gender" property="gender"/>
+        <result column="Age" property="age"/>
+        <result column="TelephoneNumber" property="telephoneNumber"/>
+        <result column="EmergencyPhone" property="emergency_contacts_telephoneNumber"/>
+        <result column="EmergencyContacts" property="emergencyContacts"/>
+
+        <association property="medicineBox" javaType="mvc.bean.MedicineBox">
+            <id column="medicineBox_num" property="medicineBoxNum"/>
+            <result column="username" property="user.username"/>
+            <result column="dispensing" property="deliver"/>
+            <result column="userId" property="user.userId"/>
+        </association>
+
+        <collection property="medicineList" ofType="mvc.bean.Medicine">
+            <id column="id" property="id"/>
+            <result column="UserId" property="userId"/>
+            <result column="medicine_name" property="medicineName"/>
+            <result column="medicine_num" property="medicineNum"/>
+            <result column="medicine_time" property="time"/>
+        </collection>
+
+        <collection property="timeList" ofType="mvc.bean.Time">
+            <result column="userId" property="userId"/>
+            <result column="time" property="time"/>
+            <result column="onTime" property="onTime"/>
+        </collection>
+
+    </resultMap>
+
+</mapper>
+

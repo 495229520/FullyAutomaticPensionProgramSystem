@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--    引入外部属性文件-->
+    <!--    将信息放入外部属性中，进行维护-->
+    <properties resource="jdbc.properties"/>
+
+    <settings>
+        <!--    将数据库字段映射到驼峰式命名的java实体类的属性中-->
+        <!--    数据库有表字段的格式是单词之间用下划线分开的-->
+        <!--    Java实体类属性：首字母小写的驼峰式命名-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <!--    mybatis全局配置-->
+    <!--    所有环境总的标签都放在environments-->
+    <!--    Mybatis工作是由可能用到的各种环境-->
+    <environments default="development">
+
+        <!--        用哪个环境就在这里写上哪个环境的id-->
+        <!--        一个具体的环境，就是一个可以使用的数据库连接信息-->
+        <environment id="development">
+
+            <!--            使用的事务管理器-->
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+
+                <!--                连接数据库的基本信息-->
+                <!--                使用${}格式从外部属性文件中引用数据-->
+                <property name="driver" value="${prop.driverClassName}"/>
+                <property name="url" value="${prop.url}"/>
+                <property name="username" value="${prop.username}"/>
+                <property name="password" value="${prop.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--    注册Mapper配置文件，只有注册了之后才可以使用-->
+    <mappers>
+        <!--        使用Mapper标签指定一个具体的Mapper配置文件-->
+        <mapper resource="mappers/UserMapper.xml"/>
+        <mapper resource="mappers/MedicineBoxMapper.xml"/>
+        <mapper resource="mappers/ManagerMapper.xml"/>
+        <mapper resource="mappers/CabinetMapper.xml"/>
+        <mapper resource="mappers/MedicineMapper.xml"/>
+        <mapper resource="mappers/TimeMapper.xml"/>
+    </mappers>
+
+</configuration>
